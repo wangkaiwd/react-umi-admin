@@ -12,14 +12,7 @@ const BasicLayout = props => {
       logo={logo}
       {...props} // props中有路由信息
       breadcrumbRender={(routers = []) => {
-        console.log('routers', routers);
-        return [
-          {
-            path: '/',
-            breadcrumbName: '首页',
-          },
-          ...routers,
-        ];
+        return routers;
       }}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (menuItemProps.isUrl || !menuItemProps.path) {
