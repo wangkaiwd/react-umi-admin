@@ -14,22 +14,26 @@
   "lint-staged": {
     "*.{js,jsx,less,md,json}": [
       "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "prettier --parser=typescript --write"
     ]
   },
   "dependencies": {
-    "@ant-design/icons": "^4.2.2",
-    "@ant-design/pro-layout": "^5.0.12",
-    "@umijs/preset-react": "^1.5.21",
-    "@umijs/test": "^3.2.16",
-    "antd": "^4.5.4",
-    "lint-staged": "^10.0.7",
-    "prettier": "^1.19.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "umi": "^3.2.16",
-    "yorkie": "^2.0.0"
+    "@ant-design/icons": "^4.7.0",
+    "@ant-design/pro-components": "^1.1.1",
+    "react": "17.x",
+    "react-dom": "17.x",
+    "umi": "^3.5.24"
   },
   "devDependencies": {
-    "umi-plugin-antd-icon-config": "^2.0.3"
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@umijs/preset-react": "1.x",
+    "@umijs/test": "^3.5.24",
+    "lint-staged": "^10.0.7",
+    "prettier": "^2.2.0",
+    "typescript": "^4.1.2",
+    "yorkie": "^2.0.0"
   }
 }
