@@ -1,38 +1,38 @@
-import type {
-  ProFormColumnsType,
-  ProFormLayoutType,
-} from '@ant-design/pro-components';
-import { BetaSchemaForm, ProFormSelect } from '@ant-design/pro-components';
-import { Alert, DatePicker, Space, Card } from 'antd';
-import moment from 'moment';
-import React, { useState } from 'react';
+import { PlusOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { ProTable, BetaSchemaForm } from '@ant-design/pro-components';
+import { Button, Space, Tag } from 'antd';
+import React, { useRef, useState } from 'react';
+import request from 'umi-request';
 
-const valueEnum = {
-  all: { text: '全部', status: 'Default' },
-  open: {
-    text: '未解决',
-    status: 'Error',
-  },
-  closed: {
-    text: '已解决',
-    status: 'Success',
-    disabled: true,
-  },
-  processing: {
-    text: '解决中',
-    status: 'Processing',
-  },
-};
-
-type DataItem = {
-  name: string;
+type GithubIssueItem = {
+  url: string;
+  id: number;
+  number: number;
+  title: string;
+  labels: {
+    name: string;
+    color: string;
+  }[];
   state: string;
+  comments: number;
+  created_at: string;
+  updated_at: string;
+  closed_at?: string;
 };
 
-const columns: ProFormColumnsType<DataItem>[] = [
+const columns: ProColumns<GithubIssueItem>[] = [
+  {
+    title: '序号',
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    width: 48,
+  },
   {
     title: '标题',
     dataIndex: 'title',
+    copyable: true,
+    ellipsis: true,
     formItemProps: {
       rules: [
         {
@@ -41,254 +41,148 @@ const columns: ProFormColumnsType<DataItem>[] = [
         },
       ],
     },
-    width: 'md',
-    colProps: {
-      xs: 24,
-      md: 12,
-    },
   },
   {
     title: '状态',
     dataIndex: 'state',
     valueType: 'select',
-    valueEnum,
-    width: 'md',
-    colProps: {
-      xs: 24,
-      md: 12,
+    valueEnum: {
+      open: {
+        text: '未解决',
+        status: 'Error',
+      },
+      closed: {
+        text: '已解决',
+        status: 'Success',
+      },
+      processing: {
+        text: '解决中',
+        status: 'Processing',
+      },
     },
   },
   {
     title: '标签',
     dataIndex: 'labels',
-    width: 'md',
-    colProps: {
-      xs: 12,
-      md: 4,
+    search: false,
+    renderFormItem: (_, { defaultRender }) => {
+      return defaultRender(_);
     },
-  },
-  {
-    valueType: 'switch',
-    title: '开关',
-    dataIndex: 'Switch',
-    fieldProps: {
-      style: {
-        width: '200px',
-      },
-    },
-    width: 'md',
-    colProps: {
-      xs: 12,
-      md: 20,
-    },
+    render: (_, record) => (
+      <Space>
+        {record.labels.map(({ name, color }) => (
+          <Tag color={color} key={name}>
+            {name}
+          </Tag>
+        ))}
+      </Space>
+    ),
   },
   {
     title: '创建时间',
     key: 'showTime',
-    dataIndex: 'createName',
-    initialValue: [moment().add(-1, 'm'), moment()],
-    renderFormItem: () => <DatePicker.RangePicker />,
-    width: 'md',
-    colProps: {
-      xs: 24,
-      md: 12,
-    },
-  },
-  {
-    title: '更新时间',
-    dataIndex: 'updateName',
-    initialValue: [moment().add(-1, 'm'), moment()],
-    renderFormItem: () => <DatePicker.RangePicker />,
-    width: 'md',
-    colProps: {
-      xs: 24,
-      md: 12,
-    },
-  },
-  {
-    title: '分组',
-    valueType: 'group',
-    columns: [
-      {
-        title: '状态',
-        dataIndex: 'groupState',
-        valueType: 'select',
-        width: 'xs',
-        colProps: {
-          xs: 12,
-        },
-        valueEnum,
-      },
-      {
-        title: '标题',
-        width: 'md',
-        dataIndex: 'groupTitle',
-        colProps: {
-          xs: 12,
-        },
-        formItemProps: {
-          rules: [
-            {
-              required: true,
-              message: '此项为必填项',
-            },
-          ],
-        },
-      },
-    ],
-  },
-  {
-    title: '列表',
-    valueType: 'formList',
-    dataIndex: 'list',
-    initialValue: [{ state: 'all', title: '标题' }],
-    colProps: {
-      xs: 24,
-      sm: 12,
-    },
-    columns: [
-      {
-        valueType: 'group',
-        columns: [
-          {
-            title: '状态',
-            dataIndex: 'state',
-            valueType: 'select',
-            colProps: {
-              xs: 24,
-              sm: 12,
-            },
-            width: 'xs',
-            valueEnum,
-          },
-          {
-            title: '标题',
-            dataIndex: 'title',
-            width: 'md',
-            formItemProps: {
-              rules: [
-                {
-                  required: true,
-                  message: '此项为必填项',
-                },
-              ],
-            },
-            colProps: {
-              xs: 24,
-              sm: 12,
-            },
-          },
-        ],
-      },
-      {
-        valueType: 'dateTime',
-        initialValue: new Date(),
-        dataIndex: 'currentTime',
-        width: 'md',
-      },
-    ],
-  },
-  {
-    title: 'FormSet',
-    valueType: 'formSet',
-    dataIndex: 'formSet',
-    colProps: {
-      xs: 24,
-      sm: 12,
-    },
-    rowProps: {
-      gutter: [16, 0],
-    },
-    columns: [
-      {
-        title: '状态',
-        dataIndex: 'groupState',
-        valueType: 'select',
-        width: 'md',
-        valueEnum,
-      },
-      {
-        width: 'xs',
-        title: '标题',
-        dataIndex: 'groupTitle',
-        tip: '标题过长会自动收缩',
-        formItemProps: {
-          rules: [
-            {
-              required: true,
-              message: '此项为必填项',
-            },
-          ],
-        },
-      },
-    ],
+    dataIndex: 'created_at',
+    valueType: 'dateTime',
+    hideInSearch: true,
   },
   {
     title: '创建时间',
     dataIndex: 'created_at',
     valueType: 'dateRange',
-    width: 'md',
-    colProps: {
-      span: 24,
-    },
-    transform: (value) => {
-      return {
-        startTime: value[0],
-        endTime: value[1],
-      };
+    hideInTable: true,
+    search: {
+      transform: (value) => {
+        return {
+          startTime: value[0],
+          endTime: value[1],
+        };
+      },
     },
   },
-];
-
-export default () => {
-  const [layoutType, setLayoutType] = useState<ProFormLayoutType>('Form');
-  return (
-    <Card>
-      <Space
-        style={{
-          width: '100%',
+  {
+    title: '操作',
+    valueType: 'option',
+    key: 'option',
+    render: (text, record, _, action) => [
+      <a
+        key="editable"
+        onClick={() => {
+          action?.startEditable?.(record.id);
         }}
-        direction="vertical"
       >
-        <Alert
-          type="warning"
-          message="QueryFilter 和 lightFilter 暂不支持grid模式"
-        />
-        <ProFormSelect
-          label="布局方式"
-          options={[
-            'Form',
-            'ModalForm',
-            'DrawerForm',
-            'LightFilter',
-            'QueryFilter',
-            'StepsForm',
-            'StepForm',
-            'Embed',
-          ]}
-          fieldProps={{
-            value: layoutType,
-            onChange: (e) => setLayoutType(e),
-          }}
-        />
-      </Space>
-      <BetaSchemaForm<DataItem>
-        trigger={<a>点击我</a>}
-        layoutType={layoutType}
-        steps={[
-          {
-            title: 'ProComponent',
+        编辑
+      </a>,
+      <a href={record.url} target="_blank" key="view">
+        查看
+      </a>,
+    ],
+  },
+];
+export default () => {
+  const actionRef = useRef<ActionType>();
+  const [visible, setVisible] = useState(false);
+  const reFlush = () => {
+    if (actionRef.current) {
+      actionRef.current.reload();
+    }
+  };
+  const onCreate = () => {
+    setVisible(true);
+  };
+  return (
+    <>
+      <ProTable<GithubIssueItem>
+        columns={columns}
+        actionRef={actionRef}
+        cardBordered
+        request={async (params = {}, sort, filter) => {
+          console.log(sort, filter);
+          return request<{
+            data: GithubIssueItem[];
+          }>('https://proapi.azurewebsites.net/github/issues', {
+            params,
+          });
+        }}
+        editable={{
+          type: 'multiple',
+        }}
+        rowKey="id"
+        revalidateOnFocus={false}
+        search={{
+          labelWidth: 'auto',
+        }}
+        form={{
+          // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
+          syncToUrl: (values, type) => {
+            if (type === 'get') {
+              return {
+                ...values,
+                created_at: [values.startTime, values.endTime],
+              };
+            }
+            return values;
           },
+        }}
+        pagination={{ pageSize: 5 }}
+        dateFormatter="string"
+        headerTitle="高级表格"
+        toolBarRender={() => [
+          <Button
+            key="button"
+            icon={<PlusOutlined />}
+            type="primary"
+            onClick={onCreate}
+          >
+            新建
+          </Button>,
         ]}
-        rowProps={{
-          gutter: [16, 16],
-        }}
-        grid={layoutType !== 'LightFilter' && layoutType !== 'QueryFilter'}
-        onFinish={async (values) => {
-          console.log(values);
-        }}
-        columns={(layoutType === 'StepsForm' ? [columns] : columns) as any}
       />
-    </Card>
+      <BetaSchemaForm
+        layoutType={'ModalForm'}
+        visible={visible}
+        onVisibleChange={setVisible}
+        columns={columns as any}
+      />
+    </>
   );
 };

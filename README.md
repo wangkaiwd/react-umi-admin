@@ -1,15 +1,7 @@
-# umi project
+## Try ant design pro
 
-## Getting Started
-
-Install dependencies,
-
-```bash
-$ yarn
-```
-
-Start the dev server,
-
-```bash
-$ yarn start
-```
+* json: use in follow scenario
+  * search
+  * table
+  * form
+  * description
