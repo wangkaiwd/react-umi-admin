@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 // custom operate: such as export
 // form parameters, pagination
 
+// write a useRequest for your enterprise
 // put parameter to url
 export default function IndexPage() {
   const [name, setName] = useState('');
@@ -31,7 +32,13 @@ export default function IndexPage() {
   return (
     <div>
       {/*<TestProFormTextFields />*/}
-      <Input value={name} onChange={(e) => setName(e.target.value)} />
+      <h2>{name}</h2>
+      <Input
+        placeholder={'Please input something...'}
+        style={{ width: '100px' }}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
     </div>
   );
 }
