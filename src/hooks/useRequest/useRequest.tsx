@@ -2,26 +2,28 @@
 // Throttle:
 
 // manual run service how to pass params ?
+// manual run: pass parameter by yourself
+// not manual run: execute service without parameter
 // params may chaos ()
 // refresh:
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 const useRequest = (service, options?) => {
   const { manual = false } = options || {};
-  const lastParamsRef = useRef([]);
+  const [params, setParams] = useState([]);
   const wrapperService = (...args) => {
-    lastParamsRef.current = args;
+    setParams(args);
     service(...args);
   };
   const refresh = () => {
-    wrapperService(...lastParamsRef.current);
+    wrapperService(...params);
   };
   useEffect(() => {
     if (!manual) {
-      wrapperService(undefined);
+      wrapperService();
     }
   }, []);
-  return { run: service, params: lastParamsRef.current, refresh };
+  return { run: wrapperService, params, refresh };
 };
 
 export default useRequest;

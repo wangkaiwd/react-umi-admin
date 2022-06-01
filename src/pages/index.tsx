@@ -1,6 +1,6 @@
-import TestProFormTextFields from '@/pages/TestProFormTextFields';
 import { Input } from 'antd';
-import useRequest from '@/hooks/useRequst/useRequest';
+import useRequest from '@/hooks/useRequest/useRequest';
+// import { useRequest } from 'ahooks';
 import { useEffect, useState } from 'react';
 // json: Search, Table, Form, Descriptions
 
@@ -15,6 +15,9 @@ import { useEffect, useState } from 'react';
 
 // write a useRequest for your enterprise
 // put parameter to url
+
+// manual invoke: need pass params when call promise
+// auto invoke: invoke passed parameter
 export default function IndexPage() {
   const [name, setName] = useState('');
   const fetchDemo = () => {
@@ -24,8 +27,7 @@ export default function IndexPage() {
       }, 3000);
     });
   };
-  const { run, params } = useRequest(fetchDemo, { manual: true });
-  console.log('params', params);
+  const { run, params } = useRequest(fetchDemo, {});
   useEffect(() => {
     run();
   }, [name]);

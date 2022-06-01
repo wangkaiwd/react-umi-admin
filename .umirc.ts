@@ -1,4 +1,5 @@
 import { defineConfig } from 'umi';
+import path from 'path';
 
 export default defineConfig({
   nodeModulesTransform: {
