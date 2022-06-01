@@ -1,11 +1,15 @@
 // Debounce:
 // Throttle:
 
-// manual run service how to pass params ?
+// manual run service how to pass params ? // params may chaos ()
 // manual run: pass parameter by yourself
 // not manual run: execute service without parameter,user can set default param
-// params may chaos ()
-// refresh:
+// refresh
+
+// manual
+// params
+// cancel ?
+
 import { useEffect, useState } from 'react';
 
 interface IOptions {
