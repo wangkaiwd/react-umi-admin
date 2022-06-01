@@ -23,6 +23,16 @@ describe('useRequest:', () => {
     });
     expect(fetchDemo).toBeCalledTimes(1);
   });
+  it('should auto run service with defaultParams', async () => {
+    const fetchDemo = jest.fn((name) => {
+      return createPromise(name, undefined, 1000);
+    });
+    const { result } = renderHook(() => {
+      return useRequest(fetchDemo, { defaultParams: 'cat' });
+    });
+    expect(fetchDemo).toBeCalledTimes(1);
+    expect(result.current.params).toEqual(['cat']);
+  });
   it('should run service manual', () => {
     const fetchDemo = jest.fn(() => {
       return createPromise('cat', undefined, 1000);

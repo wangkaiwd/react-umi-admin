@@ -3,13 +3,18 @@
 
 // manual run service how to pass params ?
 // manual run: pass parameter by yourself
-// not manual run: execute service without parameter
+// not manual run: execute service without parameter,user can set default param
 // params may chaos ()
 // refresh:
 import { useEffect, useState } from 'react';
 
-const useRequest = (service, options?) => {
-  const { manual = false } = options || {};
+interface IOptions {
+  manual?: boolean;
+  defaultParams?: any;
+}
+
+const useRequest = (service, options?: IOptions) => {
+  const { manual = false, defaultParams } = options || {};
   const [params, setParams] = useState([]);
   const wrapperService = (...args) => {
     setParams(args);
@@ -18,9 +23,10 @@ const useRequest = (service, options?) => {
   const refresh = () => {
     wrapperService(...params);
   };
+  const cancel = () => {};
   useEffect(() => {
     if (!manual) {
-      wrapperService();
+      wrapperService(defaultParams);
     }
   }, []);
   return { run: wrapperService, params, refresh };
