@@ -1,15 +1,40 @@
-import yayJpg from '../assets/yay.jpg';
+import { Button } from 'antd';
+import './index.less';
+import { useEffect, useState } from 'react';
 
-export default function HomePage() {
+const Test = (props: any) => {
+  console.log('props', props);
+  return <div>Test</div>;
+};
+
+interface Item {
+  key: string;
+  child?: JSX.Element;
+}
+
+// parameter not
+const list: Item[] = [
+  {
+    key: 'a',
+    child: undefined
+  }
+];
+
+export default function HomePage () {
+  const [formItems, setFormItems] = useState(list);
+  const findItemByKey = (key: string) => {
+    return formItems.find(item => item.key === key);
+  };
+  useEffect(() => {
+    const itemA = findItemByKey('a');
+    if (itemA) {
+      itemA.child = <Test/>;
+    }
+    setFormItems([...formItems]);
+  }, []);
   return (
-    <div>
-      <h2>Yay! Welcome to umi!</h2>
-      <p>
-        <img src={yayJpg} width="388" />
-      </p>
-      <p>
-        To get started, edit <code>pages/index.tsx</code> and save to reload.
-      </p>
+    <div className={'app'}>
+      <Button type={'primary'}>click</Button>
     </div>
   );
 }
