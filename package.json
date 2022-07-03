@@ -4,8 +4,7 @@
     "dev": "max dev",
     "build": "max build",
     "postinstall": "max setup",
-    "setup": "max setup",
-    "start": "npm run dev"
+    "setup": "max setup"
   },
   "dependencies": {
     "antd": "^4.21.4"
