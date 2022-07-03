@@ -1,15 +1,21 @@
 import { Button, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useImperativeHandle, forwardRef } from 'react';
 
 const { Text } = Typography;
 
-const Test = (props: any) => {
-  // mounted
-  console.log('props', props);
-  useEffect(() => {
-  }, []);
+const Test = forwardRef((props: any, ref) => {
+  console.log('test-render', props);
+  const a = () => {
+    console.log('a');
+  };
+  useImperativeHandle(ref, () => {
+    return {
+      a
+    };
+  });
   return <div>{props.name}</div>;
-};
+});
 
 const initialState = [
   {
@@ -33,21 +39,27 @@ const createInitialState = () => {
   return initialState;
 };
 
+//
 const UpdateNestedObjectWithComponent = (props: any) => {
   const [state, setState] = useState<any[]>(createInitialState);
   const [, update] = useState({});
+  const testRef = useRef(null);
   const findItemByKey = (key: string) => {
     return state.find(item => item.key === key);
   };
   useEffect(() => {
     const item = findItemByKey('a');
     if (item) {
-      item.component = <Test name={item.name}/>;
+      item.component = <Test name={item.name} ref={testRef}/>;
     }
     // state has updated
-    update({});
-  }, [state]);
+    // update({});
+    // remove dependencies, Test component always don't re-render
+
+    setState([...state]);
+  }, []);
   const onClick = () => {
+    console.log('testRef', testRef);
     const item = findItemByKey('a');
     item.name = 'test-a-1';
     setState([...state]);
@@ -57,7 +69,11 @@ const UpdateNestedObjectWithComponent = (props: any) => {
       return (
         <div key={item.key}>
           <h2>{item.key}</h2>
-          {item.component && <div>{item.component}</div>}
+          {item.component && <div>
+            {/*{item.component}*/}
+            {/* Why this doesn't trigger update */}
+            <item.component.type></item.component.type>
+          </div>}
         </div>
       );
     });

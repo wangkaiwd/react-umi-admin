@@ -7,6 +7,7 @@ const Child = (props: any) => {
 };
 const UpdateComponentProps = () => {
   const [item, setItem] = useState({ a: [{ key: '1', name: '1' }] });
+  const x = <Child/>;
   return (
     <div>
       <Button onClick={() => {
@@ -14,7 +15,7 @@ const UpdateComponentProps = () => {
         a[0].name = '11';
         setItem({ ...item });
       }}>update item</Button>
-      <Child options={item.a}/>
+      {x}
     </div>
   );
 };
