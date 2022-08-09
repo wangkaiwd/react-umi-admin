@@ -1,3 +1,4 @@
+import FormModal from '@/pages/Table/FormModal';
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
@@ -223,9 +224,14 @@ const Table = () => {
         dateFormatter="string"
         headerTitle="高级表格"
         toolBarRender={() => [
-          <Button key="button" icon={<PlusOutlined />} type="primary">
-            新建
-          </Button>,
+          <FormModal
+            key="add"
+            trigger={
+              <Button key="button" icon={<PlusOutlined />} type="primary">
+                新建
+              </Button>
+            }
+          />,
           <Dropdown key="menu" overlay={menu}>
             <Button>
               <EllipsisOutlined />
