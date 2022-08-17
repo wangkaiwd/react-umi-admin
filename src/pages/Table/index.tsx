@@ -168,6 +168,11 @@ const Table = () => {
     }, 2000);
   }, []);
   const actionRef = useRef<ActionType>();
+  useEffect(() => {
+    request('/api/test').then((res) => {
+      console.log('res', res);
+    });
+  }, []);
   return (
     <PageContainer ghost>
       <ProTable<GithubIssueItem>
