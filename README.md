@@ -1,3 +1,12 @@
-# README
+## React Typescript
 
-`@umijs/max` 模板项目，更多功能参考 [Umi Max 简介](https://next.umijs.org/zh-CN/docs/max/introduce)
+### Hooks
+
+- [React Hooks 使用误区，驳官方文档](https://github.com/brickspert/blog/issues/45)
+- [design decision: why do we need the stale closure problem in the first place](https://github.com/facebook/react/issues/16956)
+
+Follow scenarios will cause stale closure:
+
+- make request in `useEffect(() => { fetchApi() },[])`
+- `Promise.then`,`setTimeout`,`setInterval`
+- `useEffect` cleanup function: `useEffect(() => () => Promise.resolve().then(() => {}),[])`
