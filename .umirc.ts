@@ -31,10 +31,10 @@ export default defineConfig({
     },
   ],
   npmClient: 'pnpm',
-  // proxy: {
-  //   '/api': {
-  //     'target': 'http://localhost:3000',
-  //     'changeOrigin': true,
-  //   },
-  // },
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+      changeOrigin: true,
+    },
+  },
 });
