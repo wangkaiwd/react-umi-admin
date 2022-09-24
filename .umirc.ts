@@ -29,12 +29,17 @@ export default defineConfig({
       path: '/table',
       component: './Table',
     },
+    {
+      name: 'Proxy',
+      path: '/Usage',
+      component: './Usage/Proxy',
+    },
   ],
   npmClient: 'pnpm',
-  proxy: {
-    '/api': {
-      target: 'http://localhost:3000',
-      changeOrigin: true,
-    },
-  },
+  // proxy: {
+  //   '/api': {
+  //     target: 'http://localhost:3000',
+  //     changeOrigin: true,
+  //   },
+  // },
 });

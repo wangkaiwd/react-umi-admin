@@ -1,15 +1,15 @@
 import FormModal from '@/pages/Table/FormModal';
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { request } from '@umijs/max';
+import { useLatest } from 'ahooks';
+import { Button, Dropdown, Menu, Space, Tag } from 'antd';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import {
   PageContainer,
   ProTable,
   TableDropdown,
 } from '@ant-design/pro-components';
-import { request } from '@umijs/max';
-import { useLatest } from 'ahooks';
-import { Button, Dropdown, Menu, Space, Tag } from 'antd';
-import { useEffect, useRef, useState } from 'react';
 
 type GithubIssueItem = {
   url: string;
@@ -168,11 +168,11 @@ const Table = () => {
     }, 2000);
   }, []);
   const actionRef = useRef<ActionType>();
-  useEffect(() => {
-    request('/api/test').then((res) => {
-      console.log('res', res);
-    });
-  }, []);
+  // useEffect(() => {
+  //   request('/api/test').then((res) => {
+  //     console.log('res', res);
+  //   });
+  // }, []);
   return (
     <PageContainer ghost>
       <ProTable<GithubIssueItem>
@@ -180,7 +180,7 @@ const Table = () => {
         dataSource={dataSource}
         actionRef={actionRef}
         cardBordered
-        request={async (params = {}, sort, filter) => {
+        request={async (params = {}, sort: any, filter: any) => {
           console.log(sort, filter);
           return request<{
             data: GithubIssueItem[];
@@ -188,7 +188,7 @@ const Table = () => {
             params,
           });
         }}
-        onDataSourceChange={(dataSource) => {
+        onDataSourceChange={(dataSource: SetStateAction<any[]>) => {
           setDataSource(dataSource);
         }}
         editable={{
